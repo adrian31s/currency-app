@@ -1,0 +1,5 @@
+To run application correctly we need to setup postgresql database with credentials:
+url connection=postgresql://localhost:5432
+default database=currency
+username=postgres
+password=h

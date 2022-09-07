@@ -1,0 +1,5 @@
+com\example\app\demo\currency\repository\CurrencyRepositoryTest.class
+com\example\app\demo\currency\factory\CurrencyFactory.class
+com\example\app\demo\currency\validation\CurrencyValidationTest.class
+com\example\app\demo\currency\service\CurrencyServiceTest.class
+com\example\app\demo\CurrencyApplicationTests.class
