@@ -44,7 +44,7 @@ public class CurrencyServiceImpl implements ICurrencyService {
             }
 
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Currency not found");
+        return null;
     }
 
     private Float getReversedConvertedValueFromLocalDB(String basicCode, String convertedCode, LocalDate date) {

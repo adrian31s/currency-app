@@ -41,7 +41,7 @@ public class NBPRestApiServiceImpl implements INBPRestApiService {
                     .thenApply(this::parseJsonToCurrencies)
                     .join();
         } catch (CompletionException | IllegalArgumentException | IllegalStateException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            return null;
         }
     }
 
