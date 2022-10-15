@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class CurrencyServiceTest {
         Mockito.when(nbpRestApiService.getCurrencies(any())).thenReturn(new ArrayList<>());
 
         //when
-        Double convertedValue = currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 10d,currency.getCheckedData());
+        Double convertedValue = currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 10d, currency.getCheckedData());
 
         //then
         Assertions.assertEquals(convertValue(10d * currency.getConvertedValue()), convertedValue);
@@ -64,7 +63,7 @@ public class CurrencyServiceTest {
         Mockito.when(currencyRepository.findByCheckedData(LocalDate.now())).thenReturn(new ArrayList<>());
 
         //when
-        Double currencyRatio =currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d,currency.getCheckedData());
+        Double currencyRatio = currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d, currency.getCheckedData());
 
         //then
         Assertions.assertEquals(convertValue(currency.getConvertedValue() * 2d), currencyRatio);
@@ -81,10 +80,10 @@ public class CurrencyServiceTest {
         Mockito.when(currencyRepository.getRatioOfCurrency(currency.getConvertedCurrencyCode(), currency.getCurrencyCode(), currency.getCheckedData())).thenReturn(Optional.of(currency.getConvertedValue()));
 
         //when
-        Double currencyRatio =currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 20d,currency.getCheckedData());
+        Double currencyRatio = currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 20d, currency.getCheckedData());
 
         //then
-        Assertions.assertEquals(convertValue(1 / currency.getConvertedValue() *  20d), currencyRatio);
+        Assertions.assertEquals(convertValue(1 / currency.getConvertedValue() * 20d), currencyRatio);
 
     }
 
@@ -103,7 +102,7 @@ public class CurrencyServiceTest {
         Mockito.when(currencyRepository.getRatioOfCurrency(CurrencyCode.EUR.name(), CurrencyCode.PLN.name(), dollarRatio.getCheckedData())).thenReturn(Optional.of(euroRatio.getConvertedValue()));
 
         //when
-        Double currencyRatio =currencyService.getConvertedValueFromLocalDB(currencyToFind.getCurrencyCode(), currencyToFind.getConvertedCurrencyCode(), 2d,currencyToFind.getCheckedData());
+        Double currencyRatio = currencyService.getConvertedValueFromLocalDB(currencyToFind.getCurrencyCode(), currencyToFind.getConvertedCurrencyCode(), 2d, currencyToFind.getCheckedData());
 
         //then
         Assertions.assertEquals(convertValue(2d / dollarRatio.getConvertedValue() * euroRatio.getConvertedValue()), currencyRatio);
@@ -111,18 +110,32 @@ public class CurrencyServiceTest {
     }
 
 
-    @Test
-    void shouldThrowNotFoundExceptionCausedByIncorrectCode() {
-        //given
-        var currency = CurrencyFactory.createRandomCurrencyWithCodes(CurrencyCode.KRW.name(),"TES");
+//    @Test
+//    void shouldReturnNullCausedByIncorrectCode() { //future purpose
+//        //given
+//        var currency = CurrencyFactory.createRandomCurrencyWithCodes(CurrencyCode.KRW.name(),"TES");
+//
+//       //when
+//        Exception ex = Assertions.assertThrows(ResponseStatusException.class, ()->{
+//            currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d,currency.getCheckedData());
+//        } );
+//
+//        //then
+//        Assertions.assertTrue(ex.getMessage().contains("Currency not found"));
+//
+//    }
 
-       //when
-        Exception ex = Assertions.assertThrows(ResponseStatusException.class, ()->{
-            currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d,currency.getCheckedData());
-        } );
+    @Test
+    void shouldReturnNullCausedByIncorrectCode() {
+        //given
+        var currency = CurrencyFactory.createRandomCurrencyWithCodes(CurrencyCode.KRW.name(), "TES");
+
+        //when
+        Double d = currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d, currency.getCheckedData());
+
 
         //then
-        Assertions.assertTrue(ex.getMessage().contains("Currency not found"));
+        Assertions.assertNull(d);
 
     }
 

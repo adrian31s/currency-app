@@ -6,9 +6,7 @@ import com.example.app.demo.currency.model.Currency;
 import com.example.app.demo.currency.repository.CurrencyRepository;
 import com.example.app.demo.nbp.service.INBPRestApiService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
