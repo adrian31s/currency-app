@@ -22,7 +22,7 @@ public class CurrencyController {
                                   @RequestParam(value = "value") Double value,
                                   @RequestParam(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         try {
-            Double result = currencyService.getConvertedValueFromLocalDB(basicCode, convertedCode, value, date);
+            Double result = currencyService.getConvertedCurrency(basicCode, convertedCode, value, date);
             if (result == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Currency not found");
             return result;
 

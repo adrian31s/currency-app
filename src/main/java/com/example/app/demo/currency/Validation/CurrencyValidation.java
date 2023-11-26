@@ -6,9 +6,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 public class CurrencyValidation {
-
-
-    public static boolean isDataCorrect(String basicCode, String convertedCode, Double value, LocalDate date) {
+    public static boolean isCurrencyCorrect(String basicCode, String convertedCode, Double value, LocalDate date) {
         if (value == null || value <= 0) {
             return false;
         }

@@ -24,8 +24,8 @@ public class CurrencyServiceImpl implements ICurrencyService {
     INBPRestApiService nbpService;
 
     @Override
-    public Double getConvertedValueFromLocalDB(String basicCode, String convertedCode, Double value, LocalDate date) {
-        if (CurrencyValidation.isDataCorrect(basicCode, convertedCode, value, date)) {
+    public Double getConvertedCurrency(String basicCode, String convertedCode, Double value, LocalDate date) {
+        if (CurrencyValidation.isCurrencyCorrect(basicCode, convertedCode, value, date)) {
             updateLocalDB(date);
             Optional<Float> optionalCurrencyRatio = currencyRepository.getRatioOfCurrency(basicCode, convertedCode, date);
 
@@ -47,6 +47,7 @@ public class CurrencyServiceImpl implements ICurrencyService {
         return null;
     }
 
+    // to avoid calling nbp api too many times, check if in local database reversed currency (basic and converted) is present
     private Float getReversedConvertedValueFromLocalDB(String basicCode, String convertedCode, LocalDate date) {
         Optional<Float> optionalReversedCurrencyRatio = currencyRepository.getRatioOfCurrency(convertedCode, basicCode, date);
         if (optionalReversedCurrencyRatio.isPresent()) {
@@ -56,6 +57,7 @@ public class CurrencyServiceImpl implements ICurrencyService {
         return null;
     }
 
+    // convert reversed to searched value 
     private Float getConvertedValue(String basicCode, String convertedCode, LocalDate date) {
         Optional<Float> optionalDefaultBasicCurrencyRatio = currencyRepository.getRatioOfCurrency(basicCode, CurrencyCode.PLN.name(), date);
         Optional<Float> optionalDefaultConvertedCurrencyRatio = currencyRepository.getRatioOfCurrency(convertedCode, CurrencyCode.PLN.name(), date);
@@ -67,6 +69,7 @@ public class CurrencyServiceImpl implements ICurrencyService {
         return null;
     }
 
+    // updates local database from npb api, if currency of given data is not present
     private void updateLocalDB(LocalDate date) {
         if (currencyRepository.findByCheckedData(date).isEmpty()) {
             List<Currency> currenciesFromApi = nbpService.getCurrencies(date);
