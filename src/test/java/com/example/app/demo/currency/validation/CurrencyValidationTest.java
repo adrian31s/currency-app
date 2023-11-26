@@ -25,7 +25,7 @@ public class CurrencyValidationTest {
     void valueIsNotValid(){
         var currency = CurrencyFactory.createRandomCurrencyWithCodes(CurrencyCode.KRW.name(), CurrencyCode.TRY.name());
         currency.setConvertedValue(0f);
-        Assertions.assertFalse(CurrencyValidation.isDataCorrect(currency.getCurrencyCode(),currency.getConvertedCurrencyCode(), Double.valueOf(currency.getConvertedValue()),currency.getCheckedData()));
+        Assertions.assertFalse(CurrencyValidation.isCurrencyCorrect(currency.getCurrencyCode(),currency.getConvertedCurrencyCode(), Double.valueOf(currency.getConvertedValue()),currency.getCheckedData()));
     }
 
     @Test

@@ -48,7 +48,7 @@ public class CurrencyServiceTest {
         Mockito.when(nbpRestApiService.getCurrencies(any())).thenReturn(new ArrayList<>());
 
         //when
-        Double convertedValue = currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 10d,currency.getCheckedData());
+        Double convertedValue = currencyService.getConvertedCurrency(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 10d,currency.getCheckedData());
 
         //then
         Assertions.assertEquals(convertValue(10d * currency.getConvertedValue()), convertedValue);
@@ -64,7 +64,7 @@ public class CurrencyServiceTest {
         Mockito.when(currencyRepository.findByCheckedData(LocalDate.now())).thenReturn(new ArrayList<>());
 
         //when
-        Double currencyRatio =currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d,currency.getCheckedData());
+        Double currencyRatio =currencyService.getConvertedCurrency(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d,currency.getCheckedData());
 
         //then
         Assertions.assertEquals(convertValue(currency.getConvertedValue() * 2d), currencyRatio);
@@ -81,7 +81,7 @@ public class CurrencyServiceTest {
         Mockito.when(currencyRepository.getRatioOfCurrency(currency.getConvertedCurrencyCode(), currency.getCurrencyCode(), currency.getCheckedData())).thenReturn(Optional.of(currency.getConvertedValue()));
 
         //when
-        Double currencyRatio =currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 20d,currency.getCheckedData());
+        Double currencyRatio =currencyService.getConvertedCurrency(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 20d,currency.getCheckedData());
 
         //then
         Assertions.assertEquals(convertValue(1 / currency.getConvertedValue() *  20d), currencyRatio);
@@ -103,7 +103,7 @@ public class CurrencyServiceTest {
         Mockito.when(currencyRepository.getRatioOfCurrency(CurrencyCode.EUR.name(), CurrencyCode.PLN.name(), dollarRatio.getCheckedData())).thenReturn(Optional.of(euroRatio.getConvertedValue()));
 
         //when
-        Double currencyRatio =currencyService.getConvertedValueFromLocalDB(currencyToFind.getCurrencyCode(), currencyToFind.getConvertedCurrencyCode(), 2d,currencyToFind.getCheckedData());
+        Double currencyRatio =currencyService.getConvertedCurrency(currencyToFind.getCurrencyCode(), currencyToFind.getConvertedCurrencyCode(), 2d,currencyToFind.getCheckedData());
 
         //then
         Assertions.assertEquals(convertValue(2d / dollarRatio.getConvertedValue() * euroRatio.getConvertedValue()), currencyRatio);
@@ -118,7 +118,7 @@ public class CurrencyServiceTest {
 
        //when
         Exception ex = Assertions.assertThrows(ResponseStatusException.class, ()->{
-            currencyService.getConvertedValueFromLocalDB(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d,currency.getCheckedData());
+            currencyService.getConvertedCurrency(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d,currency.getCheckedData());
         } );
 
         //then
