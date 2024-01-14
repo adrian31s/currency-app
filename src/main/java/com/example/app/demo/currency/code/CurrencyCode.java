@@ -40,6 +40,6 @@ public enum CurrencyCode {
     public final String label;
 
     CurrencyCode(String label) {
-        this.label= label;
+        this.label = label;
     }
 }

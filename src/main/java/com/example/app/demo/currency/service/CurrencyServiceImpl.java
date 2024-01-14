@@ -1,14 +1,13 @@
 package com.example.app.demo.currency.service;
 
-import com.example.app.demo.currency.Validation.CurrencyValidation;
 import com.example.app.demo.currency.code.CurrencyCode;
 import com.example.app.demo.currency.model.Currency;
 import com.example.app.demo.currency.repository.CurrencyRepository;
+import com.example.app.demo.currency.utils.Util;
+import com.example.app.demo.currency.validation.CurrencyValidation;
 import com.example.app.demo.nbp.service.INBPRestApiService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,12 +15,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CurrencyServiceImpl implements ICurrencyService {
-    @Autowired
-    CurrencyRepository currencyRepository;
-
-    @Autowired
-    INBPRestApiService nbpService;
+    private final CurrencyRepository currencyRepository;
+    private final INBPRestApiService nbpService;
 
     @Override
     public Double getConvertedCurrency(String basicCode, String convertedCode, Double value, LocalDate date) {
@@ -30,17 +27,17 @@ public class CurrencyServiceImpl implements ICurrencyService {
             Optional<Float> optionalCurrencyRatio = currencyRepository.getRatioOfCurrency(basicCode, convertedCode, date);
 
             if (optionalCurrencyRatio.isPresent()) {
-                return convertValue(value, optionalCurrencyRatio.get());
+                return Util.calculateCurrencyValue(value, optionalCurrencyRatio.get());
             }
 
             optionalCurrencyRatio = Optional.ofNullable(getReversedConvertedValueFromLocalDB(basicCode, convertedCode, date));
             if (optionalCurrencyRatio.isPresent()) {
-                return convertValue(value, optionalCurrencyRatio.get());
+                return Util.calculateCurrencyValue(value, optionalCurrencyRatio.get());
             }
 
             optionalCurrencyRatio = Optional.ofNullable(getConvertedValue(basicCode, convertedCode, date));
             if (optionalCurrencyRatio.isPresent()) {
-                return convertValue(value, optionalCurrencyRatio.get());
+                return Util.calculateCurrencyValue(value, optionalCurrencyRatio.get());
             }
 
         }
@@ -83,11 +80,4 @@ public class CurrencyServiceImpl implements ICurrencyService {
             currencyRepository.saveAll(validatedCurrencies);
         }
     }
-
-    private Double convertValue(Double value, Float currencyRatio) {
-        double result = value * currencyRatio.doubleValue();
-        result = Math.round(result * 100) / 100d;
-        return result;
-    }
-
 }

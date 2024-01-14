@@ -1,6 +1,7 @@
 package com.example.app.demo.currency.repository;
 
 import com.example.app.demo.currency.model.Currency;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

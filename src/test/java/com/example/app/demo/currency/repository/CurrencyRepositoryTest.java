@@ -59,10 +59,8 @@ public class CurrencyRepositoryTest {
         currencyRepository.save(currency);
         currencyRepository.save(currency1);
 
-
         //when
         List<Currency> currenciesFromLocalDb = currencyRepository.findByCheckedData(missingDate);
-
 
         //then
         Assertions.assertEquals(0, currenciesFromLocalDb.size());

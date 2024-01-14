@@ -11,4 +11,4 @@ public enum NBPApiCode {
     NBPApiCode(String label) {
         this.label = label;
     }
-    }
+}

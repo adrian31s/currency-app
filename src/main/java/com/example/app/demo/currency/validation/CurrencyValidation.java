@@ -1,12 +1,14 @@
-package com.example.app.demo.currency.Validation;
+package com.example.app.demo.currency.validation;
 
 import com.example.app.demo.currency.code.CurrencyCode;
+import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 
+@UtilityClass
 public class CurrencyValidation {
-    public static boolean isCurrencyCorrect(String basicCode, String convertedCode, Double value, LocalDate date) {
+    public boolean isCurrencyCorrect(String basicCode, String convertedCode, Double value, LocalDate date) {
         if (value == null || value <= 0) {
             return false;
         }
@@ -14,18 +16,15 @@ public class CurrencyValidation {
         return isCurrencyDataCorrect(basicCode, convertedCode, date);
     }
 
-    public static boolean isCurrencyDataCorrect(String basicCode, String convertedCode, LocalDate date) {
+    public boolean isCurrencyDataCorrect(String basicCode, String convertedCode, LocalDate date) {
         if (date.isAfter(LocalDate.now())) {
             return false;
         }
 
-        if (!(isCurrencyCodeCorrect(basicCode) && isCurrencyCodeCorrect(convertedCode))) {
-            return false;
-        }
-        return true;
+        return isCurrencyCodeCorrect(basicCode) && isCurrencyCodeCorrect(convertedCode);
     }
 
-    public static boolean isCurrencyCodeCorrect(String currencyCode) {
+    public boolean isCurrencyCodeCorrect(String currencyCode) {
         return Arrays.stream(CurrencyCode.values()).anyMatch(p -> p.name().equals(currencyCode));
     }
 

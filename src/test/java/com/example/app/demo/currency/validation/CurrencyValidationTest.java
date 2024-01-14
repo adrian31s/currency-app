@@ -1,7 +1,6 @@
 package com.example.app.demo.currency.validation;
 
 
-import com.example.app.demo.currency.Validation.CurrencyValidation;
 import com.example.app.demo.currency.code.CurrencyCode;
 import com.example.app.demo.currency.factory.CurrencyFactory;
 import org.junit.jupiter.api.Assertions;
@@ -12,7 +11,6 @@ import java.time.LocalDate;
 
 @SpringBootTest
 public class CurrencyValidationTest {
-
 
     @Test
     void dateIsNotValid(){
@@ -39,8 +37,4 @@ public class CurrencyValidationTest {
         var currency = CurrencyFactory.createRandomCurrencyWithCodes(CurrencyCode.KRW.name(), CurrencyCode.TRY.name());
         Assertions.assertTrue(CurrencyValidation.isCurrencyDataCorrect(currency.getCurrencyCode(),currency.getConvertedCurrencyCode(),currency.getCheckedData()));
     }
-
-
-
-
 }
