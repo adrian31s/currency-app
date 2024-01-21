@@ -1,5 +1,6 @@
 package com.example.app.demo.currency.controller;
 
+import com.example.app.demo.common.exceptions.NotFoundCurrency;
 import com.example.app.demo.currency.service.ICurrencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,12 +23,9 @@ public class CurrencyController {
                                   @RequestParam(value = "value") Double value,
                                   @RequestParam(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         try {
-            Double result = currencyService.getConvertedCurrency(basicCode, convertedCode, value, date);
-
-            if (result == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Currency not found");
-            return result;
-
-        } catch (Exception e) {
+            return currencyService.getConvertedCurrency(basicCode, convertedCode, value, date);
+        }
+        catch (NotFoundCurrency nfc) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Currency not found");
         }
     }

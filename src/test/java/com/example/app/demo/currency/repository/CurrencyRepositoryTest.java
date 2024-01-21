@@ -12,6 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @SpringBootTest
 public class CurrencyRepositoryTest {
     @Autowired
@@ -33,7 +36,7 @@ public class CurrencyRepositoryTest {
         currencyRepository.save(currency1);
 
         //then
-        Assertions.assertEquals(2, currencyRepository.findAll().size());
+        assertEquals(2, currencyRepository.findAll().size());
     }
 
     @Test
@@ -45,8 +48,8 @@ public class CurrencyRepositoryTest {
         currencyRepository.save(currency);
 
         //then
-        Assertions.assertTrue(currencyRepository.getRatioOfCurrency(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), currency.getCheckedData()).isPresent());
-        Assertions.assertEquals(1, currencyRepository.findByCheckedData(LocalDate.now()).size());
+        assertTrue(currencyRepository.getRatioOfCurrency(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), currency.getCheckedData()).isPresent());
+        assertEquals(1, currencyRepository.findByCheckedData(LocalDate.now()).size());
     }
 
     @Test
@@ -63,7 +66,7 @@ public class CurrencyRepositoryTest {
         List<Currency> currenciesFromLocalDb = currencyRepository.findByCheckedData(missingDate);
 
         //then
-        Assertions.assertEquals(0, currenciesFromLocalDb.size());
+        assertEquals(0, currenciesFromLocalDb.size());
     }
 
 }

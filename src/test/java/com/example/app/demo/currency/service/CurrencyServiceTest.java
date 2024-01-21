@@ -1,5 +1,6 @@
 package com.example.app.demo.currency.service;
 
+import com.example.app.demo.common.exceptions.NotFoundCurrency;
 import com.example.app.demo.currency.code.CurrencyCode;
 import com.example.app.demo.currency.factory.CurrencyFactory;
 import com.example.app.demo.currency.repository.CurrencyRepository;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
@@ -51,7 +54,7 @@ public class CurrencyServiceTest {
         Double convertedValue = currencyService.getConvertedCurrency(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 10d,currency.getCheckedData());
 
         //then
-        Assertions.assertEquals(convertValue(10d * currency.getConvertedValue()), convertedValue);
+        assertEquals(convertValue(10d * currency.getConvertedValue()), convertedValue);
     }
 
     @Test
@@ -67,7 +70,7 @@ public class CurrencyServiceTest {
         Double currencyRatio =currencyService.getConvertedCurrency(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d,currency.getCheckedData());
 
         //then
-        Assertions.assertEquals(convertValue(currency.getConvertedValue() * 2d), currencyRatio);
+        assertEquals(convertValue(currency.getConvertedValue() * 2d), currencyRatio);
 
     }
 
@@ -84,7 +87,7 @@ public class CurrencyServiceTest {
         Double currencyRatio =currencyService.getConvertedCurrency(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 20d,currency.getCheckedData());
 
         //then
-        Assertions.assertEquals(convertValue(1 / currency.getConvertedValue() *  20d), currencyRatio);
+        assertEquals(convertValue(1 / currency.getConvertedValue() *  20d), currencyRatio);
 
     }
 
@@ -106,7 +109,7 @@ public class CurrencyServiceTest {
         Double currencyRatio =currencyService.getConvertedCurrency(currencyToFind.getCurrencyCode(), currencyToFind.getConvertedCurrencyCode(), 2d,currencyToFind.getCheckedData());
 
         //then
-        Assertions.assertEquals(convertValue(2d / dollarRatio.getConvertedValue() * euroRatio.getConvertedValue()), currencyRatio);
+        assertEquals(convertValue(2d / dollarRatio.getConvertedValue() * euroRatio.getConvertedValue()), currencyRatio);
 
     }
 
@@ -117,12 +120,12 @@ public class CurrencyServiceTest {
         var currency = CurrencyFactory.createRandomCurrencyWithCodes(CurrencyCode.KRW.name(),"TES");
 
        //when
-        Exception ex = Assertions.assertThrows(ResponseStatusException.class, ()->{
+        Exception ex = Assertions.assertThrows(NotFoundCurrency.class, ()->{
             currencyService.getConvertedCurrency(currency.getCurrencyCode(), currency.getConvertedCurrencyCode(), 2d,currency.getCheckedData());
         } );
 
         //then
-        Assertions.assertTrue(ex.getMessage().contains("Currency not found"));
+        assertTrue(ex.getMessage().contains("Currency not found"));
 
     }
 
